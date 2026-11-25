@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interaktiv Dars — Ishlab chiqish, sinash va joriy qilish</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f8fafc;
+    min-height: 100vh;
+    padding: 28px 20px;
+  }
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* Sahifalarni boshqaruvchi yashirin radio tugmalar */
+  .page-radio {
+    display: none;
+  }
+
+  /* Barcha ichki sahifalar avval yashiriladi */
+  .page-view {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Tanlangan sahifani ko'rsatish */
+  #p-home:checked ~ .page-wrapper #view-home,
+  #p-rej1:checked ~ .page-wrapper #view-rej1,
+  #p-rej2:checked ~ .page-wrapper #view-rej2,
+  #p-rej3:checked ~ .page-wrapper #view-rej3 {
+    display: block;
+  }
+
+  /* Bosh sahifa sarlavhasi */
+  .home-header {
+    text-align: center;
+    margin-bottom: 35px;
+    padding: 26px 22px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid #334155;
+    border-radius: 20px;
+  }
+  .home-badge {
+    display: inline-block;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .home-header h1 {
+    font-size: 28px;
+    color: #38bdf8;
+    margin-bottom: 10px;
+    line-height: 1.35;
+  }
+  .home-header p {
+    font-size: 17px;
+    color: #cbd5e1;
+  }
+
+  /* Bosh sahifadagi 3 ta reja kartochkasi */
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .plan-card {
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 18px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+    border-top: 7px solid #0284c7;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    user-select: none;
+  }
+  .plan-card.card-2 {
+    border-top-color: #10b981;
+  }
+  .plan-card.card-3 {
+    border-top-color: #f59e0b;
+  }
+  .plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 45px rgba(2, 132, 199, 0.35);
+  }
+  .plan-num {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .card-2 .plan-num {
+    background: #d1fae5;
+    color: #047857;
+  }
+  .card-3 .plan-num {
+    background: #fef3c7;
+    color: #b45309;
+  }
+  .plan-card h2 {
+    font-size: 19px;
+    line-height: 1.4;
+    color: #0f172a;
+    margin-bottom: 14px;
+  }
+  .plan-card .desc {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .go-btn {
+    display: block;
+    text-align: center;
+    background: #0284c7;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 13px 16px;
+    border-radius: 10px;
+  }
+  .card-2 .go-btn {
+    background: #059669;
+  }
+  .card-3 .go-btn {
+    background: #d97706;
+  }
+
+  /* Ichki sahifalar yuqori paneli */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .back-btn {
+    background: #334155;
+    color: #ffffff;
+    border: 2px solid #64748b;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+  }
+  .back-btn:hover {
+    background: #0284c7;
+    border-color: #7dd3fc;
+  }
+  .quick-nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .quick-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #475569;
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+  }
+  .quick-btn:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
+  }
+
+  /* Ichki sahifa asosiy kartochkasi */
+  .sub-card {
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 18px;
+    padding: 32px 36px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  }
+  .sub-card h2 {
+    font-size: 24px;
+    color: #0284c7;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  /* 1-reja ichidagi ichki bo'limlar (JS siz) */
+  .sub-radio {
+    display: none;
+  }
+  .topic-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .topic-tab {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .topic-tab:hover {
+    border-color: #0284c7;
+    background: #e0f2fe;
+  }
+  #t-loyiha:checked ~ .topic-tabs label[for="t-loyiha"],
+  #t-strategiya:checked ~ .topic-tabs label[for="t-strategiya"],
+  #t-birlik:checked ~ .topic-tabs label[for="t-birlik"],
+  #t-integratsion:checked ~ .topic-tabs label[for="t-integratsion"] {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+  }
+  .topic-box {
+    display: none;
+  }
+  #t-loyiha:checked ~ .topic-panels #tp-loyiha,
+  #t-strategiya:checked ~ .topic-panels #tp-strategiya,
+  #t-birlik:checked ~ .topic-panels #tp-birlik,
+  #t-integratsion:checked ~ .topic-panels #tp-integratsion {
+    display: block;
+  }
+
+  /* 2-reja ichidagi bo'limlar (JS siz) */
+  .conf-radio {
+    display: none;
+  }
+  .conf-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .conf-tab {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 15px 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .conf-tab:hover {
+    border-color: #059669;
+    background: #d1fae5;
+  }
+  #c-joriy:checked ~ .conf-tabs label[for="c-joriy"],
+  #c-amalga:checked ~ .conf-tabs label[for="c-amalga"],
+  #c-natija:checked ~ .conf-tabs label[for="c-natija"] {
+    background: #059669;
+    color: #ffffff;
+    border-color: #059669;
+  }
+  .conf-box {
+    display: none;
+  }
+  #c-joriy:checked ~ .conf-panels #cp-joriy,
+  #c-amalga:checked ~ .conf-panels #cp-amalga,
+  #c-natija:checked ~ .conf-panels #cp-natija {
+    display: block;
+  }
+
+  /* Matn bloklari */
+  .info-def {
+    background: #f0f9ff;
+    border-left: 5px solid #0284c7;
+    padding: 16px 20px;
+    font-size: 18px;
+    line-height: 1.6;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .info-list {
+    margin: 12px 0 18px 24px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #334155;
+  }
+  .info-list li {
+    margin-bottom: 9px;
+  }
+  .info-ex {
+    background: #fefce8;
+    border-left: 5px solid #eab308;
+    padding: 15px 18px;
+    font-size: 17px;
+    line-height: 1.55;
+    border-radius: 8px;
+    color: #422006;
+  }
+  .info-tip {
+    margin-top: 14px;
+    background: #ecfdf5;
+    border-left: 5px solid #10b981;
+    padding: 14px 18px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 8px;
+    color: #064e3b;
+  }
+
+  table.diff-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+    font-size: 16px;
+  }
+  table.diff-tbl th, table.diff-tbl td {
+    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    text-align: left;
+  }
+  table.diff-tbl th {
+    background: #059669;
+    color: #ffffff;
+  }
+  table.diff-tbl tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* 3-reja (Uyga vazifa) stillari */
+  .hw-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #b45309;
+    border: 2px solid #f59e0b;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .hw-box {
+    background: #fffbeb;
+    border-left: 7px solid #f59e0b;
+    padding: 24px 28px;
+    border-radius: 12px;
+    font-size: 24px;
+    line-height: 1.55;
+    color: #0f172a;
+    margin-bottom: 24px;
+  }
+  .hw-pages {
+    background: #0284c7;
+    color: #ffffff;
+    padding: 2px 12px;
+    border-radius: 7px;
+    font-weight: bold;
+  }
+  .hw-muhr {
+    color: #b45309;
+    font-weight: 800;
+    text-decoration: underline;
+  }
+  .hw-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .hw-step {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .hw-step h4 {
+    color: #0284c7;
+    margin-bottom: 6px;
+    font-size: 16px;
+  }
+  .hw-step p {
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 850px) {
+    .plans-grid, .conf-tabs, .topic-tabs, .hw-steps {
+      grid-template-columns: 1fr;
+    }
+    .hw-box {
+      font-size: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- SAHIFALARNI ALMASHTIRUVCHI TUGMALAR -->
+  <input type="radio" name="mainpage" id="p-home" class="page-radio" checked>
+  <input type="radio" name="mainpage" id="p-rej1" class="page-radio">
+  <input type="radio" name="mainpage" id="p-rej2" class="page-radio">
+  <input type="radio" name="mainpage" id="p-rej3" class="page-radio">
+
+  <div class="page-wrapper">
+
+    <!-- ==================== BOSH SAHIFA ==================== -->
+    <div id="view-home" class="page-view">
+      <div class="home-header">
+        <div class="home-badge">📘 7-BOB: TIZIMNING XIZMAT DAVRI | II-CHORAK, 5-MAVZU</div>
+        <h1>ISHLAB CHIQISH, SINASH VA JORIY QILISH</h1>
+        <p>Darslik: 96–100-sahifalar — Kerakli bo‘limga o‘tish uchun quyidagi 3 ta rejadan birining ustiga bosing</p>
+      </div>
+
+      <div class="plans-grid">
+        <!-- 1-REJA KARTASI -->
+        <label for="p-rej1" class="plan-card card-1">
+          <div>
+            <span class="plan-num">1-REJA</span>
+            <h2>SINOV LOYIHASI, SINOV STRATEGIYASI, BIRLIK SINOV, INTEGRATSION SINOV</h2>
+            <p class="desc">Tizimni ishlab chiqish va sinash jarayonida sinov loyihasi, strategiyasi, birlik hamda integratsion sinovlarning mohiyati.</p>
+          </div>
+          <span class="go-btn">1-rejaga o‘tish →</span>
+        </label>
+
+        <!-- 2-REJA KARTASI -->
+        <label for="p-rej2" class="plan-card card-2">
+          <div>
+            <span class="plan-num">2-REJA</span>
+            <h2>JORIY QILISH, AMALGA OSHIRISH QANDAY BAJARILADI?</h2>
+            <p class="desc">Tayyorlangan axborot tizimini real ish muhitiga joriy qilish, o‘qitish, ma’lumotlarni ko‘chirish va ishga tushirish bosqichlari.</p>
+          </div>
+          <span class="go-btn">2-rejaga o‘tish →</span>
+        </label>
+
+        <!-- 3-REJA KARTASI -->
+        <label for="p-rej3" class="plan-card card-3">
+          <div>
+            <span class="plan-num">3-REJA</span>
+            <h2>UYGA VAZIFA: 96–100-SAHIFALAR</h2>
+            <p class="desc">Kitobingizni 96–100-sahifalarida berilgan mavzuni to‘liq o‘qib-o‘rganib tushunganingizni daftaringizga yozib muhrlang.</p>
+          </div>
+          <span class="go-btn">3-rejaga o‘tish →</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- ==================== 1-REJA SAHIFASI ==================== -->
+    <div id="view-rej1" class="page-view">
+      <div class="top-bar">
+        <label for="p-home" class="back-btn">← Bosh sahifa</label>
+        <div class="quick-nav">
+          <label for="p-rej2" class="quick-btn">2-reja: Joriy qilish va amalga oshirish →</label>
+          <label for="p-rej3" class="quick-btn">3-reja: Uyga vazifa →</label>
+        </div>
+      </div>
+
+      <div class="sub-card">
+        <h2>1-reja: Sinov loyihasi, sinov strategiyasi, birlik sinov, integratsion sinov</h2>
+
+        <input type="radio" name="t1" id="t-loyiha" class="sub-radio" checked>
+        <input type="radio" name="t1" id="t-strategiya" class="sub-radio">
+        <input type="radio" name="t1" id="t-birlik" class="sub-radio">
+        <input type="radio" name="t1" id="t-integratsion" class="sub-radio">
+
+        <div class="topic-tabs">
+          <label for="t-loyiha" class="topic-tab">📋 SINOV LOYIHASI</label>
+          <label for="t-strategiya" class="topic-tab">🧭 SINOV STRATEGIYASI</label>
+          <label for="t-birlik" class="topic-tab">🧩 BIRLIK SINOV</label>
+          <label for="t-integratsion" class="topic-tab">🔗 INTEGRATSION SINOV</label>
+        </div>
+
+        <div class="topic-panels">
+          <!-- 1-ichki bo'lim: Sinov loyihasi -->
+          <div id="tp-loyiha" class="topic-box">
+            <div class="info-def">
+              <b>Sinov loyihasi (test rejasi)</b> — tizimning talablarga mosligini tekshirish uchun nima, qanday, qachon va kim tomonidan sinovdan o‘tkazilishini belgilaydigan hujjat va amaliy reja.
+            </div>
+            <ol class="info-list">
+              <li><b>Sinov maqsadi:</b> Tizimdagi xato va kamchiliklarni foydalanuvchiga yetib borguncha aniqlash.</li>
+              <li><b>Sinov obyektlari:</b> Modullar, foydalanuvchi interfeysi, ma’lumotlar bazasi va hisobot shakllari.</li>
+              <li><b>Kirish va chiqish ma’lumotlari:</b> To‘g‘ri, chegaraviy va noto‘g‘ri qiymatlar to‘plami tayyorlanadi.</li>
+              <li><b>Kutiladigan natija:</b> Har bir senariy uchun tizim qanday javob qaytarishi oldindan yozib qo‘yiladi.</li>
+            </ol>
+            <div class="info-ex">
+              <b>Misol:</b> Elektron baholash tizimida 0 dan 100 gacha ball kiritilganda to‘g‘ri baho chiqishini, 100 dan katta son kiritilganda esa ogohlantirish chiqishini tekshirish sinov loyihasiga kiradi.
+            </div>
+          </div>
+
+          <!-- 2-ichki bo'lim: Sinov strategiyasi -->
+          <div id="tp-strategiya" class="topic-box">
+            <div class="info-def">
+              <b>Sinov strategiyasi</b> — butun loyiha davomida sinovlarni tashkil etishning umumiy yondashuvi, bosqichlari, resurslari va sifat mezonlarini belgilovchi yo‘nalish.
+            </div>
+            <ul class="info-list">
+              <li><b>Bosqichma-bosqich yondashuv:</b> Kichik qismlardan boshlab butun tizim darajasigacha izchil tekshiriladi.</li>
+              <li><b>Xavflarga yo‘naltirilganlik:</b> Eng muhim va xato ehtimoli yuqori bo‘lgan funksiyalarga birinchi navbatda e’tibor qaratiladi.</li>
+              <li><b>Qo‘lda va avtomatik sinov:</b> Takrorlanuvchi tekshiruvlar avtomatlashtiriladi, foydalanuvchi qulayligi esa qo‘lda baholanadi.</li>
+              <li><b>Regressiya sinovi:</b> Yangi o‘zgartirish yoki tuzatishdan keyin avval ishlagan qismlar buzilmaganiga ishonch hosil qilinadi.</li>
+            </ul>
+            <div class="info-tip">
+              <b>💡 Muhim jihat:</b> Yaxshi tanlangan sinov strategiyasi vaqtni tejaydi va xatolarni kech bosqichlarda tuzatish xarajatini kamaytiradi.
+            </div>
+          </div>
+
+          <!-- 3-ichki bo'lim: Birlik sinov -->
+          <div id="tp-birlik" class="topic-box">
+            <div class="info-def">
+              <b>Birlik sinov (Unit testing)</b> — dastur yoki tizimning eng kichik, alohida ajratib olinadigan qismlari (funksiya, metod, modul yoki shakl)ning mustaqil ishlashini tekshirish.
+            </div>
+            <ol class="info-list">
+              <li>Har bir modul tizimning qolgan qismidan alohida tekshiriladi.</li>
+              <li>Dasturchi yoki sinovchi unga turli kirish qiymatlarini berib, chiqish natijasini solishtiradi.</li>
+              <li>Xato topilsa, aynan qaysi kichik bo‘lakda muammo borligini darhol aniqlash oson bo‘ladi.</li>
+            </ol>
+            <div class="info-ex">
+              <b>Misol:</b> O‘quvchining o‘rtacha ballini hisoblovchi alohida funksiyani 5 ta baho bilan sinab ko‘rish — birlik sinovdir.
+            </div>
+          </div>
+
+          <!-- 4-ichki bo'lim: Integratsion sinov -->
+          <div id="tp-integratsion" class="topic-box">
+            <div class="info-def">
+              <b>Integratsion sinov (Integration testing)</b> — alohida tekshirilgan modullar bir-biriga ulanganda ular o‘rtasida ma’lumot almashinuvi va hamkorlikning to‘g‘ri ishlashini tekshirish.
+            </div>
+            <ul class="info-list">
+              <li>Birlik sinovidan o‘tgan modullar o‘zaro bog‘lanadi.</li>
+              <li>Modullar orasidagi interfeys, parametr uzatish va ma’lumotlar bazasi bilan aloqa sinovdan o‘tkaziladi.</li>
+              <li>Alohida to‘g‘ri ishlagan ikki modul yonma-yon kelganda yuzaga keladigan mos kelmasliklar aniqlanadi.</li>
+            </ul>
+            <div class="info-ex">
+              <b>Misol:</b> "Login/parol tekshirish" moduli "O‘quvchi kabineti" va "Natijalar bazasi" bilan ulanganda foydalanuvchi o‘ziga tegishli ma’lumotlarni ko‘ra olishini tekshirish — integratsion sinovdir.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 2-REJA SAHIFASI ==================== -->
+    <div id="view-rej2" class="page-view">
+      <div class="top-bar">
+        <label for="p-home" class="back-btn">← Bosh sahifa</label>
+        <div class="quick-nav">
+          <label for="p-rej1" class="quick-btn">← 1-reja: Sinov turlari</label>
+          <label for="p-rej3" class="quick-btn">3-reja: Uyga vazifa →</label>
+        </div>
+      </div>
+
+      <div class="sub-card">
+        <h2>2-reja: Joriy qilish, amalga oshirish qanday bajariladi?</h2>
+
+        <input type="radio" name="c2" id="c-joriy" class="conf-radio" checked>
+        <input type="radio" name="c2" id="c-amalga" class="conf-radio">
+        <input type="radio" name="c2" id="c-natija" class="conf-radio">
+
+        <div class="conf-tabs">
+          <label for="c-joriy" class="conf-tab">🚀 JORIY QILISH MOHIYATI</label>
+          <label for="c-amalga" class="conf-tab">⚙️ AMALGA OSHIRISH BOSQICHLARI</label>
+          <label for="c-natija" class="conf-tab">📊 TAQQOSLASH VA NAZORAT</label>
+        </div>
+
+        <div class="conf-panels">
+          <!-- 1-ichki bo'lim: Joriy qilish mohiyati -->
+          <div id="cp-joriy" class="conf-box">
+            <div class="info-def">
+              <b>Joriy qilish (Deployment / Implementation)</b> — ishlab chiqilgan va sinovdan o‘tkazilgan axborot tizimini tashkilot yoki o‘quv jarayonining kundalik ish muhitiga rasman kiritish va ishga tushirish bosqichi.
+            </div>
+            <ol class="info-list">
+              <li><b>Tayyorgarlik:</b> Server, kompyuter, tarmoq va dasturiy muhitning tayyorligi tekshiriladi.</li>
+              <li><b>Ma’lumotlarni ko‘chirish:</b> Mavjud ma’lumotlar tozalanib, yangi tizimga yuklanadi.</li>
+              <li><b>Foydalanuvchilarni o‘qitish:</b> Xodimlar yoki o‘quvchilarga tizimdan foydalanish yo‘riqnomalari va amaliy ko‘nikmalar beriladi.</li>
+              <li><b>Ishga tushirish va qo‘llab-quvvatlash:</b> Tizim real faoliyatga o‘tkaziladi va dastlabki kundalik ishlash jarayoni kuzatib boriladi.</li>
+            </ol>
+          </div>
+
+          <!-- 2-ichki bo'lim: Amalga oshirish usullari -->
+          <div id="cp-amalga" class="conf-box">
+            <div class="info-def">
+              Tizimni amaliyotga tatbiq etishda vaziyat va tavakkalchilik darajasiga qarab bir nechta usuldan foydalaniladi:
+            </div>
+            <ul class="info-list">
+              <li><b>To‘g‘ridan-to‘g‘ri o‘tish:</b> Eski tizim to‘xtatilib, uning o‘rniga darhol yangi tizim ishga tushiriladi.</li>
+              <li><b>Parallel ishlash:</b> Ma’lum muddat eski va yangi tizim yonma-yon ishlatilib, natijalar solishtiriladi.</li>
+              <li><b>Bosqichma-bosqich (pilot) joriy etish:</b> Avval bitta bo‘lim, sinf yoki guruhda sinab ko‘riladi, so‘ng barchaga yoyiladi.</li>
+            </ul>
+            <div class="info-ex">
+              <b>Misol:</b> Yangi elektron jurnal yoki test tizimini avval bitta sinfda sinab, keyin barcha parallel sinflarga joriy qilish xavfsiz va qulay usul hisoblanadi.
+            </div>
+          </div>
+
+          <!-- 3-ichki bo'lim: Jadval -->
+          <div id="cp-natija" class="conf-box">
+            <table class="diff-tbl">
+              <tr>
+                <th>Tushuncha</th>
+                <th>Asosiy vazifasi</th>
+                <th>Natijasi</th>
+              </tr>
+              <tr>
+                <td><b>Sinash</b></td>
+                <td>Xato, nosozlik va kamchiliklarni aniqlash</td>
+                <td>Ishonchli va tekshirilgan tizim</td>
+              </tr>
+              <tr>
+                <td><b>Joriy qilish</b></td>
+                <td>Tizimni ish muhitiga o‘rnatish va moslashtirish</td>
+                <td>Foydalanishga tayyor muhit</td>
+              </tr>
+              <tr>
+                <td><b>Amalga oshirish</b></td>
+                <td>Kundalik jarayonlarda muntazam qo‘llash</td>
+                <td>Barqaror ishlovchi tizim</td>
+              </tr>
+            </table>
+            <div class="info-tip">
+              <b>✅ Xulosa:</b> Sinash tizimning to‘g‘ri ishlashini kafolatlaydi, joriy qilish va amalga oshirish esa uni real hayotda foyda keltiradigan vositaga aylantiradi.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 3-REJA SAHIFASI (UYGA VAZIFA) ==================== -->
+    <div id="view-rej3" class="page-view">
+      <div class="top-bar">
+        <label for="p-home" class="back-btn">← Bosh sahifa</label>
+        <div class="quick-nav">
+          <label for="p-rej1" class="quick-btn">← 1-reja</label>
+          <label for="p-rej2" class="quick-btn">← 2-reja</label>
+        </div>
+      </div>
+
+      <div class="sub-card">
+        <div class="hw-badge">📚 3-REJA: UYGA VAZIFA</div>
+        <div class="hw-box">
+          <b>UYGA VAZIFA:</b> Kitobingizni <span class="hw-pages">96–100-sahifalarida</span> berilgan mavzuni to‘liq o‘qib-o‘rganib tushunganingizni daftaringizga yozib <span class="hw-muhr">muhrlang</span>.
+        </div>
+
+        <div class="hw-steps">
+          <div class="hw-step">
+            <h4>1-qadam</h4>
+            <p>Darslikning 96–100-sahifalaridagi mavzuni boshidan oxirigacha diqqat bilan o‘qing.</p>
+          </div>
+          <div class="hw-step">
+            <h4>2-qadam</h4>
+            <p>Sinov loyihasi, sinov strategiyasi, birlik hamda integratsion sinov farqlarini ajrating.</p>
+          </div>
+          <div class="hw-step">
+            <h4>3-qadam</h4>
+            <p>Joriy qilish va amalga oshirish tartibini o‘z so‘zlaringiz bilan daftaringizga yozing.</p>
+          </div>
+          <div class="hw-step">
+            <h4>4-qadam</h4>
+            <p>Darsdagi asosiy tushunchalarga 1–2 tadan hayotiy misol keltirib, yozuvlaringizni mustahkamlang.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

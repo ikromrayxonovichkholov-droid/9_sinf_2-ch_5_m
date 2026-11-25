@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ijtimoiy tarmoq tushunchalari — Interaktiv dars</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+    max-width: 900px;
+  }
+  header h1 {
+    font-size: 28px;
+    color: #38bdf8;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  header p {
+    font-size: 16px;
+    color: #94a3b8;
+  }
+
+  /* 4 ta asosiy tugma */
+  .buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 30px;
+  }
+  .topic-btn {
+    background: #1e293b;
+    border: 2px solid #334155;
+    color: #e2e8f0;
+    padding: 18px 15px;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .topic-btn span.icon {
+    font-size: 28px;
+  }
+  .topic-btn:hover {
+    border-color: #38bdf8;
+    transform: translateY(-3px);
+    background: #263349;
+  }
+  .topic-btn.active {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    border-color: #7dd3fc;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4);
+  }
+
+  /* Ma'lumot oynasi */
+  .content-card {
+    background: #ffffff;
+    color: #0f172a;
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 18px;
+    padding: 35px 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    min-height: 360px;
+    animation: fadeIn 0.35s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .placeholder-text {
+    text-align: center;
+    padding: 80px 20px;
+    color: #64748b;
+    font-size: 20px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  .card-header .big-icon {
+    font-size: 40px;
+  }
+  .card-header h2 {
+    font-size: 28px;
+    color: #0284c7;
+  }
+  .definition {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #1e293b;
+    background: #f0f9ff;
+    padding: 16px 20px;
+    border-left: 5px solid #0284c7;
+    border-radius: 8px;
+    margin-bottom: 22px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #334155;
+    margin-bottom: 10px;
+  }
+  ul.features {
+    list-style: none;
+    margin-bottom: 22px;
+  }
+  ul.features li {
+    font-size: 17px;
+    padding: 8px 0 8px 28px;
+    position: relative;
+    color: #334155;
+    line-height: 1.5;
+  }
+  ul.features li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #16a34a;
+    font-weight: bold;
+  }
+  .example-box {
+    background: #fefce8;
+    border: 1px solid #fde047;
+    border-left: 5px solid #eab308;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #422006;
+  }
+  .safety-box {
+    margin-top: 15px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-left: 5px solid #ef4444;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #7f1d1d;
+  }
+
+  /* Ekran kichik bo'lsa moslashish */
+  @media (max-width: 768px) {
+    .buttons-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .content-card {
+      padding: 25px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>IJTIMOIY TARMOQDA BLOG, MIKROBLOG, SELFI OLISH VA FOLLOVER</h1>
+    <p>Ma’lumotni ko‘rish uchun quyidagi tugmalardan birining ustiga bosing (yoki klaviaturada 1, 2, 3, 4 raqamlarini bosing)</p>
+  </header>
+
+  <div class="buttons-grid">
+    <button class="topic-btn" id="btn-blog" onclick="showInfo('blog')">
+      <span class="icon">📝</span>
+      <span>1. BLOG</span>
+    </button>
+    <button class="topic-btn" id="btn-microblog" onclick="showInfo('microblog')">
+      <span class="icon">⚡</span>
+      <span>2. MIKROBLOG</span>
+    </button>
+    <button class="topic-btn" id="btn-selfie" onclick="showInfo('selfie')">
+      <span class="icon">🤳</span>
+      <span>3. SELFI OLISH</span>
+    </button>
+    <button class="topic-btn" id="btn-follower" onclick="showInfo('follower')">
+      <span class="icon">👥</span>
+      <span>4. FOLLOVER</span>
+    </button>
+  </div>
+
+  <div class="content-card" id="display-area">
+    <div class="placeholder-text">
+      👆 Darsni boshlash uchun yuqoridagi <b>BLOG</b>, <b>MIKROBLOG</b>, <b>SELFI OLISH</b> yoki <b>FOLLOVER</b> tugmalaridan birini bosing.
+    </div>
+  </div>
+
+<script>
+  const topics = {
+    blog: {
+      icon: "📝",
+      title: "BLOG (Veb-log) nima?",
+      definition: "<b>Blog</b> — bu muallif (blogger) tomonidan muntazam ravishda yangilanib boriladigan shaxsiy yoki mavzuli onlayn kundalik, maqolalar sayti yoki sahifasidir.",
+      features: [
+        "Matnlar batafsil, chuqur tahliliy yoki hikoya shaklida bo‘ladi.",
+        "Ko‘pincha rasmlar, jadvallar, infografikalar va videolar bilan boyitiladi.",
+        "Ta’lim, texnologiya, sayohat, sport kabi istalgan yo‘nalishda yuritilishi mumkin.",
+        "O‘quvchilar izoh qoldirish va muallif bilan fikr almashish imkoniga ega."
+      ],
+      example: "<b>Maktab hayotidan misol:</b> Bir o‘quvchi maktab veb-saytida <i>«Kompyuterni viruslardan himoya qilishning 7 ta eng ishonchli usuli»</i> nomli katta, rasmli maqola joylashtirdi. Boshqalar uni o‘qib, izohlarda o‘z fikrini yozmoqda. <b>Bu — blog.</b>",
+      safety: ""
+    },
+    microblog: {
+      icon: "⚡",
+      title: "MIKROBLOG nima?",
+      definition: "<b>Mikrobloq</b> — bu oddiy blogning qisqa va tezkor shakli bo‘lib, unda ixcham matnli xabarlar, havolalar, qisqa videolar yoki rasmlar tezkor joylashtiriladi.",
+      features: [
+        "Xabarlar juda qisqa va lo‘nda bo‘ladi (bir necha jumla yoki belgi chegarasida).",
+        "Yangiliklar oqimi real vaqt rejimida juda tez yangilanadi.",
+        "Tezkor xabar yetkazish, qisqa fikr ulashish va jonli muloqot uchun qulay."
+      ],
+      example: "<b>Maktab hayotidan misol:</b> O‘quvchi qisqagina qilib: <i>«Bugun soat 14:00 da 15-xonada Dasturlash to‘garagi bo‘ladi. Hamma kelsin!»</i> deb 2 qator xabar yozdi. <b>Bu — mikrobloq.</b>",
+      safety: ""
+    },
+    selfie: {
+      icon: "🤳",
+      title: "SELFI (Selfie) nima?",
+      definition: "<b>Selfi</b> — bu insonning o‘zini o‘zi smartfonning old kamerasi, planshet yoki veb-kamera yordamida (qo‘lda tutib yoki selfi-tayanch bilan) suratga olishidir.",
+      features: [
+        "Suratga oluvchi shaxsning o‘zi kadr markazida bo‘ladi.",
+        "Sayohat, tadbirlar, dars jarayoni yoki muhim lahzalarni darhol esdalik sifatida muhrlaydi.",
+        "Ijtimoiy tarmoqlarda tezkor vizual taassurot ulashish uchun keng qo‘llaniladi."
+      ],
+      example: "<b>Maktab hayotidan misol:</b> O‘quvchi informatika to‘garagida yasagan robotini ushlab, telefonning old kamerasi orqali o‘zi bilan birga rasmga tushdi. <b>Bu — selfi.</b>",
+      safety: "<b>⚠️ Xavfsizlik va odob qoidasi:</b> Baland binolarda, yo‘l harakati qismida yoki temir yo‘l yaqinida hayotga xavf solib selfi olmang! Shuningdek, boshqalarning ruxsatisiz ularni kadrga tushirib internetga joylamang."
+    },
+    follower: {
+      icon: "👥",
+      title: "FOLLOVER (Follower) nima?",
+      definition: "<b>Follover</b> (inglizcha <i>follower</i> — «ergashuvchi», «kuzatuvchi») — bu ijtimoiy tarmoqlarda biror shaxs, blogger yoki kanal sahifasiga <b>obuna bo‘lgan foydalanuvchi</b>.",
+      features: [
+        "Obuna bo‘lgan sahifasidagi barcha yangi postlar, rasm va videolarni o‘z lentasida muntazam ko‘rib boradi.",
+        "Kontentga layk bosishi, izoh yozishi va boshqalar bilan ulashishi (repost qilishi) mumkin.",
+        "O‘zbek tilida Telegram va YouTube’da <b>«Obunachi»</b>, Instagram’da esa <b>«Kuzatuvchi»</b> deb yuritiladi."
+      ],
+      example: "<b>Maktab hayotidan misol:</b> Maktabning rasmiy Telegram kanaliga 450 nafar o‘quvchi va ota-ona a’zo bo‘lib, barcha e’lonlarni kuzatib bormoqda. Ularning har biri kanalning <b>folloveri (obunachisi)</b> hisoblanadi.",
+      safety: ""
+    }
+  };
+
+  function showInfo(key) {
+    const data = topics[key];
+    if (!data) return;
+
+    // Barcha tugmalardan active klassini olib tashlash
+    document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.remove('active'));
+    // Bosilgan tugmani belgilash
+    document.getElementById('btn-' + key).classList.add('active');
+
+    // Ro'yxat elementlarini yig'ish
+    const listHTML = data.features.map(item => `<li>${item}</li>`).join('');
+    const safetyHTML = data.safety ? `<div class="safety-box">${data.safety}</div>` : '';
+
+    // Ekranga chiqarish (animatsiya qayta ishlashi uchun elementni yangilash)
+    const displayArea = document.getElementById('display-area');
+    displayArea.style.animation = 'none';
+    displayArea.offsetHeight; // reflow
+    displayArea.style.animation = 'fadeIn 0.35s ease';
+
+    displayArea.innerHTML = `
+      <div class="card-header">
+        <span class="big-icon">${data.icon}</span>
+        <h2>${data.title}</h2>
+      </div>
+      <div class="definition">${data.definition}</div>
+      <div class="section-title">Asosiy xususiyatlari:</div>
+      <ul class="features">${listHTML}</ul>
+      <div class="example-box">${data.example}</div>
+      ${safetyHTML}
+    `;
+  }
+
+  // Klaviatura tugmalari (1, 2, 3, 4) orqali boshqarish
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '1') showInfo('blog');
+    if (e.key === '2') showInfo('microblog');
+    if (e.key === '3') showInfo('selfie');
+    if (e.key === '4') showInfo('follower');
+  });
+</script>
+
+</body>
+</html>

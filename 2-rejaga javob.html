@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Videokonferensiya va Vebkonferensiya</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 25px 15px;
+  }
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    color: #38bdf8;
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+
+  /* Yashirin radio tugmalar */
+  input[type="radio"] {
+    display: none;
+  }
+
+  /* Tugmalar qatori */
+  .tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 240px;
+    background-color: #1e293b;
+    color: #e2e8f0;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    padding: 18px 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tab-btn:hover {
+    background-color: #273549;
+    border-color: #38bdf8;
+  }
+
+  /* Faol tugma rangi */
+  #r-video:checked ~ .tabs label[for="r-video"],
+  #r-web:checked ~ .tabs label[for="r-web"],
+  #r-diff:checked ~ .tabs label[for="r-diff"] {
+    background-color: #0284c7;
+    border-color: #7dd3fc;
+    color: #ffffff;
+  }
+
+  /* Ma'lumot oynalari */
+  .panel {
+    display: none;
+    background-color: #ffffff;
+    color: #0f172a;
+    border-radius: 14px;
+    padding: 30px;
+    line-height: 1.6;
+  }
+
+  #r-video:checked ~ .panels #p-video,
+  #r-web:checked ~ .panels #p-web,
+  #r-diff:checked ~ .panels #p-diff {
+    display: block;
+  }
+
+  .panel h2 {
+    color: #0284c7;
+    font-size: 24px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .def-box {
+    background-color: #f0f9ff;
+    border-left: 5px solid #0284c7;
+    padding: 15px;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .panel h3 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 10px;
+  }
+  .panel ul {
+    margin-left: 22px;
+    margin-bottom: 20px;
+  }
+  .panel li {
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: #334155;
+  }
+  .ex-box {
+    background-color: #fefce8;
+    border-left: 5px solid #eab308;
+    padding: 15px;
+    font-size: 17px;
+    color: #422006;
+  }
+  .sum-box {
+    background-color: #ecfdf5;
+    border-left: 5px solid #10b981;
+    padding: 15px;
+    font-size: 17px;
+    color: #064e3b;
+    margin-top: 15px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    text-align: left;
+  }
+  th {
+    background-color: #0284c7;
+    color: #ffffff;
+  }
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>VIDEOKONFERENSIYA VA VEBKONFERENSIYA HAMDA ULARNING FARQLARI</h1>
+  <p class="subtitle">Kerakli bo‘limni ko‘rish uchun pastdagi 3 ta tugmadan birining ustiga bosing</p>
+
+  <input type="radio" name="topic" id="r-video" checked>
+  <input type="radio" name="topic" id="r-web">
+  <input type="radio" name="topic" id="r-diff">
+
+  <div class="tabs">
+    <label for="r-video" class="tab-btn">1. VIDEOKONFERENSIYA</label>
+    <label for="r-web" class="tab-btn">2. VEBKONFERENSIYA</label>
+    <label for="r-diff" class="tab-btn">3. FARQLARI (JADVAL)</label>
+  </div>
+
+  <div class="panels">
+    <!-- 1. VIDEOKONFERENSIYA -->
+    <div id="p-video" class="panel">
+      <h2>VIDEOKONFERENSIYA nima?</h2>
+      <div class="def-box">
+        <b>Videokonferensiya</b> — bu turli joylarda (boshqa xona, shahar yoki davlatda) turgan ikki yoki undan ortiq ishtirokchilarning internet orqali <b>bir vaqtning o‘zida ham ovoz, ham jonli video tasvir</b> orqali yuzma-yuz muloqot qilish texnologiyasidir.
+      </div>
+      <h3>Asosiy xususiyatlari:</h3>
+      <ul>
+        <li><b>Jonli muloqot:</b> Asosiy e’tibor ishtirokchilarning bir-birini ekranda jonli ko‘rib, suhbatlashishiga qaratiladi.</li>
+        <li><b>Texnik vositalar:</b> Veb-kamera, mikrofon va karnay (naushnik) muhim rol o‘ynaydi.</li>
+        <li><b>Teng ishtirok:</b> Ishtirokchilar muhokama yoki majlisda faol suhbatlashadi.</li>
+        <li><b>Dasturlar:</b> Zoom, Google Meet, Microsoft Teams, Telegram videoqo‘ng‘iroq.</li>
+      </ul>
+      <div class="ex-box">
+        <b>Hayotiy misol:</b> Ikki maktab o‘quvchilari kamera va mikrofonni yoqib, bir-birini ekranda ko‘rib savol-javob o‘tkazishi — <b>videokonferensiyadir.</b>
+      </div>
+    </div>
+
+    <!-- 2. VEBKONFERENSIYA -->
+    <div id="p-web" class="panel">
+      <h2>VEBKONFERENSIYA (Vebinar) nima?</h2>
+      <div class="def-box">
+        <b>Vebkonferensiya</b> — bu internet va veb-brauzer orqali o‘tkaziladigan onlayn uchrashuv bo‘lib, unda asosiy e’tibor <b>taqdimotlar, hujjatlar, ekran tasviri va ma’lumotlarni birgalikda ko‘rish hamda ulashishga</b> qaratiladi.
+      </div>
+      <h3>Asosiy xususiyatlari:</h3>
+      <ul>
+        <li><b>Ekran va fayllar:</b> Slaydlar ko‘rsatish, kompyuter ekranini ulashish, elektron doskada yozish va hujjat uzatish mumkin.</li>
+        <li><b>Kamera shart emas:</b> Tinglovchilar kamerani yoqmasdan ham kuzatishi mumkin (ko‘pincha ma’ruzachi ko‘rinadi).</li>
+        <li><b>Interaktivlik:</b> Matnli chat, so‘rovnomalar va savol-javob vositalari ishlatiladi.</li>
+        <li><b>Katta auditoriya:</b> Bir vaqtning o‘zida ko‘plab tinglovchilar qatnasha oladi.</li>
+      </ul>
+      <div class="ex-box">
+        <b>Hayotiy misol:</b> O‘qituvchi onlayn darsda o‘z ekranini o‘quvchilarga ko‘rsatib, slayd va dasturlarni tushuntirishi, o‘quvchilar esa chat orqali savol berishi — <b>vebkonferensiyadir.</b>
+      </div>
+    </div>
+
+    <!-- 3. FARQLARI -->
+    <div id="p-diff" class="panel">
+      <h2>Videokonferensiya va Vebkonferensiyaning farqlari</h2>
+      <table>
+        <tr>
+          <th>Mezon</th>
+          <th>Videokonferensiya</th>
+          <th>Vebkonferensiya</th>
+        </tr>
+        <tr>
+          <td><b>Asosiy maqsad</b></td>
+          <td>Jonli video va ovoz orqali yuzma-yuz suhbatlashish</td>
+          <td>Taqdimot, ekran, fayl va ma’lumotlarni birgalikda ulashish</td>
+        </tr>
+        <tr>
+          <td><b>Kamera talabi</b></td>
+          <td>Ishtirokchilar bir-birini ko‘rishi uchun kamera muhim</td>
+          <td>Kamera shart emas (asosan ma’ruzachi yoki ekran ko‘rinadi)</td>
+        </tr>
+        <tr>
+          <td><b>Ishtirokchilar roli</b></td>
+          <td>Hamma teng huquqli suhbatlashadi (muhokama, majlis)</td>
+          <td>Ma’ruzachi tushuntiradi, tinglovchilar kuzatadi va chatda yozadi</td>
+        </tr>
+        <tr>
+          <td><b>Asosiy vositalar</b></td>
+          <td>Kamera va mikrofon (jonli tasvir va ovoz)</td>
+          <td>Ekran ulashish, slaydlar, chat, elektron doska, so‘rovnoma</td>
+        </tr>
+        <tr>
+          <td><b>Hayotiy o‘xshatish</b></td>
+          <td>Majlislar zali yoki jonli davra suhbati</td>
+          <td>O‘quv auditoriyasi yoki ma’ruza zali</td>
+        </tr>
+      </table>
+      <div class="sum-box">
+        <b>Xulosa:</b> Hamkasblar bilan kameralarni yoqib, bir-biringizni ko‘rib suhbatlashsangiz — bu <b>videokonferensiya</b>. O‘quvchilarga ekraningizdagi taqdimotni ko‘rsatib, chat orqali onlayn dars o‘tsangiz — bu <b>vebkonferensiya</b>.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
